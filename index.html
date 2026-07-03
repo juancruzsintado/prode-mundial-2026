@@ -358,7 +358,7 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px
 <footer>Hecho con cariño para el grupo · los resultados se actualizan a medida que se juegan los partidos</footer>
 
 <script>window.EMBEDDED_DATA = {
-  "updated_at": "2026-07-03T08:04:00Z",
+  "updated_at": "2026-07-03T12:00:00Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -472,100 +472,32 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px
       }
     ],
     "ro16": [
-      {
-        "teamA": "Paraguay",
-        "scoreA": null,
-        "teamB": "Francia",
-        "scoreB": null
-      },
-      {
-        "teamA": "Canada",
-        "scoreA": null,
-        "teamB": "Marruecos",
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      },
-      {
-        "teamA": "USA",
-        "scoreA": null,
-        "teamB": "Bélgica",
-        "scoreB": null
-      },
-      {
-        "teamA": "Brasil",
-        "scoreA": null,
-        "teamB": "Noruega",
-        "scoreB": null
-      },
-      {
-        "teamA": "México",
-        "scoreA": null,
-        "teamB": "Inglaterra",
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      }
+      { "teamA": "Paraguay",  "scoreA": null, "teamB": "Francia",   "scoreB": null, "kickoff": "2026-07-04T21:00:00Z", "venue": "Filadelfia"    },
+      { "teamA": "Canada",    "scoreA": null, "teamB": "Marruecos", "scoreB": null, "kickoff": "2026-07-04T17:00:00Z", "venue": "Houston"        },
+      { "teamA": "Portugal",  "scoreA": null, "teamB": "España",    "scoreB": null, "kickoff": "2026-07-06T19:00:00Z", "venue": "Los Ángeles"    },
+      { "teamA": "USA",       "scoreA": null, "teamB": "Bélgica",   "scoreB": null, "kickoff": "2026-07-07T00:00:00Z", "venue": "Seattle"        },
+      { "teamA": "Brasil",    "scoreA": null, "teamB": "Noruega",   "scoreB": null, "kickoff": "2026-07-05T20:00:00Z", "venue": "Nueva York"     },
+      { "teamA": "México",    "scoreA": null, "teamB": "Inglaterra","scoreB": null, "kickoff": "2026-07-06T00:00:00Z", "venue": "Ciudad de México"},
+      { "teamA": null,        "scoreA": null, "teamB": null,         "scoreB": null, "kickoff": "2026-07-07T16:00:00Z", "venue": "Atlanta"        },
+      { "teamA": null,        "scoreA": null, "teamB": null,         "scoreB": null, "kickoff": "2026-07-07T20:00:00Z", "venue": "Vancouver"      }
     ],
     "qf": [
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      }
+      { "teamA": null, "scoreA": null, "teamB": null, "scoreB": null, "kickoff": "2026-07-09T20:00:00Z", "venue": "Boston"      },
+      { "teamA": null, "scoreA": null, "teamB": null, "scoreB": null, "kickoff": "2026-07-10T19:00:00Z", "venue": "Los Ángeles" },
+      { "teamA": null, "scoreA": null, "teamB": null, "scoreB": null, "kickoff": "2026-07-11T21:00:00Z", "venue": "Miami"       },
+      { "teamA": null, "scoreA": null, "teamB": null, "scoreB": null, "kickoff": "2026-07-12T01:00:00Z", "venue": "Kansas City" }
     ],
     "sf": [
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      },
-      {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null
-      }
+      { "teamA": null, "scoreA": null, "teamB": null, "scoreB": null, "kickoff": "2026-07-14T19:00:00Z", "venue": "Dallas"  },
+      { "teamA": null, "scoreA": null, "teamB": null, "scoreB": null, "kickoff": "2026-07-15T19:00:00Z", "venue": "Atlanta" }
     ],
     "final": {
       "teamA": null,
       "scoreA": null,
       "teamB": null,
-      "scoreB": null
+      "scoreB": null,
+      "kickoff": "2026-07-19T19:00:00Z",
+      "venue": "Nueva York"
     },
     "champion": null
   },
@@ -2390,14 +2322,16 @@ function renderMatch(m, opts){
   // header bar
   const head = document.createElement("div");
   head.className = "match-head";
+  const venueStr = opts.venue !== undefined ? opts.venue : m.venue;
+  const kickoffStr = opts.kickoff !== undefined ? opts.kickoff : m.kickoff;
   const rndSpan = document.createElement("span");
   rndSpan.className = "match-rnd";
-  rndSpan.textContent = opts.roundLabel||"";
+  rndSpan.textContent = (opts.roundLabel||"") + (venueStr ? " · " + venueStr : "");
   head.appendChild(rndSpan);
-  if(!played && bothTeams && m.kickoff){
+  if(!played && kickoffStr){
     const dtSpan = document.createElement("span");
     dtSpan.className = "match-dt";
-    dtSpan.textContent = formatKickoff(m.kickoff);
+    dtSpan.textContent = formatKickoff(kickoffStr);
     head.appendChild(dtSpan);
   }
   div.appendChild(head);
@@ -2725,7 +2659,10 @@ function renderFriendBracket(name){
       const realM=real[st.key][i];
       const pts=scoreMatch(m,realM,nxtRound(f,st.key,i));
       const realPlayed=realM.scoreA!=null;
-      grid.appendChild(renderMatch(m,{points:pts,roundLabel:st.rnd,grayscale:realPlayed&&pts===0}));
+      grid.appendChild(renderMatch(m,{
+        points:pts,roundLabel:st.rnd,grayscale:realPlayed&&pts===0,
+        venue:realM.venue,kickoff:realPlayed?null:realM.kickoff
+      }));
     });
     body.appendChild(grid);
     sec.appendChild(tog);
@@ -2788,8 +2725,31 @@ function setupTabs(){
   });
 }
 
+// Propagate winners from each round into the next round's slot (only fills null slots)
+function deriveBracket(real){
+  function prop(src, dst, isFinal){
+    src.forEach(function(m,i){
+      var w = winnerOf(m);
+      if(!w) return;
+      var di = Math.floor(i/2), isA = i%2===0;
+      if(isFinal){
+        if(isA  && !dst.teamA) dst.teamA = w;
+        if(!isA && !dst.teamB) dst.teamB = w;
+      } else {
+        if(isA  && !dst[di].teamA) dst[di].teamA = w;
+        if(!isA && !dst[di].teamB) dst[di].teamB = w;
+      }
+    });
+  }
+  prop(real.ro32, real.ro16, false);
+  prop(real.ro16, real.qf,   false);
+  prop(real.qf,   real.sf,   false);
+  prop(real.sf,   real.final, true);
+}
+
 function loadData(d){
   DATA=d;
+  deriveBracket(DATA.real);
   document.getElementById("updatedAt").textContent =
     "Última actualización: "+new Date(d.updated_at).toLocaleString("es-AR",{dateStyle:"medium",timeStyle:"short"});
   renderReal();

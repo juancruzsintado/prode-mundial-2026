@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-02T07:15:00Z",
+  "updated_at": "2026-07-03T07:20:00Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -38,15 +38,15 @@
       },
       {
         "teamA": "Portugal",
-        "scoreA": null,
+        "scoreA": 2,
         "teamB": "Croacia",
-        "scoreB": null
+        "scoreB": 1
       },
       {
         "teamA": "España",
-        "scoreA": null,
+        "scoreA": 3,
         "teamB": "Austria",
-        "scoreB": null
+        "scoreB": 0
       },
       {
         "teamA": "USA",
@@ -98,9 +98,9 @@
       },
       {
         "teamA": "Suiza",
-        "scoreA": null,
+        "scoreA": 2,
         "teamB": "Argelia",
-        "scoreB": null
+        "scoreB": 0
       },
       {
         "teamA": "Colombia",

@@ -186,6 +186,31 @@ table.rank td.r{text-align:right;}
 .friend-select button.active{background:var(--gm);color:#fff;border-color:var(--gm);}
 .empty-pred{color:var(--muted);font-style:italic;padding:20px 0;text-align:center;}
 
+/* ── B&W MATCHES ───────────────────────────────────────── */
+.match-bw{filter:grayscale(1);opacity:.75;}
+.match-bw .match-head{background:#555;}
+.match-bw .team.winner{color:#111;}
+
+/* ── ACCORDION ─────────────────────────────────────────── */
+.acc-section{margin-bottom:0;}
+.acc-toggle{
+  width:100%;display:flex;align-items:center;gap:10px;
+  padding:14px 0;border:none;background:none;cursor:pointer;
+  border-bottom:1px solid #e5e1d3;text-align:left;
+  font-family:'Archivo',sans-serif;
+}
+.acc-body{padding:16px 0 20px;}
+.acc-body.closed{display:none;}
+.acc-badge{
+  font-size:10px;font-weight:700;color:var(--muted2);
+  background:#f0ede3;padding:2px 8px;border-radius:999px;
+}
+.acc-chevron{
+  margin-left:auto;color:var(--muted);font-size:18px;
+  transition:transform .2s;display:inline-block;line-height:1;
+}
+.acc-toggle.collapsed .acc-chevron{transform:rotate(-90deg);}
+
 /* ── FOOTER ────────────────────────────────────────────── */
 footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px;}
 
@@ -270,23 +295,55 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px
   </section>
 
   <section id="bracket">
-    <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Dieciseisavos de final</span></div>
-    <div id="ro32" class="matchgrid"></div>
+    <div class="acc-section">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span class="sec-num">01</span><span class="sec-title">Dieciseisavos de final</span>
+        <span class="acc-badge" id="badge-ro32"></span>
+        <span class="acc-chevron">▾</span>
+      </button>
+      <div class="acc-body" id="body-ro32"><div id="ro32" class="matchgrid"></div></div>
+    </div>
 
-    <div class="sec-head" style="margin-top:28px"><span class="sec-num">02</span><span class="sec-title">Octavos de final</span></div>
-    <div id="ro16" class="matchgrid"></div>
+    <div class="acc-section">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span class="sec-num">02</span><span class="sec-title">Octavos de final</span>
+        <span class="acc-badge" id="badge-ro16"></span>
+        <span class="acc-chevron">▾</span>
+      </button>
+      <div class="acc-body" id="body-ro16"><div id="ro16" class="matchgrid"></div></div>
+    </div>
 
-    <div class="sec-head" style="margin-top:28px"><span class="sec-num">03</span><span class="sec-title">Cuartos de final</span></div>
-    <div id="qf" class="matchgrid"></div>
+    <div class="acc-section">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span class="sec-num">03</span><span class="sec-title">Cuartos de final</span>
+        <span class="acc-badge" id="badge-qf"></span>
+        <span class="acc-chevron">▾</span>
+      </button>
+      <div class="acc-body" id="body-qf"><div id="qf" class="matchgrid"></div></div>
+    </div>
 
-    <div class="sec-head" style="margin-top:28px"><span class="sec-num">04</span><span class="sec-title">Semifinales</span></div>
-    <div id="sf" class="matchgrid"></div>
+    <div class="acc-section">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span class="sec-num">04</span><span class="sec-title">Semifinales</span>
+        <span class="acc-badge" id="badge-sf"></span>
+        <span class="acc-chevron">▾</span>
+      </button>
+      <div class="acc-body" id="body-sf"><div id="sf" class="matchgrid"></div></div>
+    </div>
 
-    <div class="sec-head" style="margin-top:28px"><span class="sec-num">05</span><span class="sec-title">Final</span></div>
-    <div id="final" class="matchgrid"></div>
-    <div id="championBanner" class="champion-banner tbd">
-      <div class="trophy">🏆</div>
-      <div class="name">A definir</div>
+    <div class="acc-section">
+      <button class="acc-toggle" onclick="toggleAcc(this)">
+        <span class="sec-num">05</span><span class="sec-title">Final</span>
+        <span class="acc-badge" id="badge-final"></span>
+        <span class="acc-chevron">▾</span>
+      </button>
+      <div class="acc-body" id="body-final">
+        <div id="final" class="matchgrid"></div>
+        <div id="championBanner" class="champion-banner tbd">
+          <div class="trophy">🏆</div>
+          <div class="name">A definir</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2327,6 +2384,7 @@ function renderMatch(m, opts){
 
   const div = document.createElement("div");
   div.className = "match";
+  if(opts.grayscale) div.classList.add("match-bw");
 
   // header bar
   const head = document.createElement("div");
@@ -2377,11 +2435,44 @@ function renderMatch(m, opts){
 
 function renderBracketSection(containerId, matches, label){
   const c = document.getElementById(containerId);
+  if(!c) return;
   c.innerHTML = "";
-  matches.forEach(m=>{
-    if(!m.teamA && !m.teamB) return; // skip totally unknown
-    c.appendChild(renderMatch(m,{roundLabel:label}));
+
+  const indexed = matches.map((m,i)=>({m,i})).filter(({m})=>m.teamA||m.teamB);
+  const pending = indexed.filter(({m})=>m.scoreA==null);
+  const played  = indexed.filter(({m})=>m.scoreA!=null);
+
+  // pending: soonest kickoff first, then original index
+  pending.sort((a,b)=>{
+    if(a.m.kickoff&&b.m.kickoff) return new Date(a.m.kickoff)-new Date(b.m.kickoff);
+    return a.i-b.i;
   });
+  // played: reverse order (most recently played first)
+  played.sort((a,b)=>b.i-a.i);
+
+  [...pending,...played].forEach(({m})=>{
+    c.appendChild(renderMatch(m,{roundLabel:label, grayscale:m.scoreA!=null}));
+  });
+
+  // Badge
+  const badge = document.getElementById("badge-"+containerId);
+  if(badge) badge.textContent = played.length+"/"+indexed.length+" jugados";
+
+  // Accordion: close if all played
+  const body = document.getElementById("body-"+containerId);
+  const toggle = body&&body.previousElementSibling;
+  if(body&&pending.length===0&&indexed.length>0){
+    body.classList.add("closed");
+    if(toggle) toggle.classList.add("collapsed");
+  } else if(body){
+    body.classList.remove("closed");
+    if(toggle) toggle.classList.remove("collapsed");
+  }
+}
+
+function toggleAcc(btn){
+  btn.classList.toggle("collapsed");
+  btn.nextElementSibling.classList.toggle("closed");
 }
 
 function renderReal(){
@@ -2389,9 +2480,24 @@ function renderReal(){
   renderBracketSection("ro16", DATA.real.ro16, "8vos");
   renderBracketSection("qf",   DATA.real.qf,   "4tos");
   renderBracketSection("sf",   DATA.real.sf,   "Semis");
+
+  // Final (single match)
   const fc = document.getElementById("final");
   fc.innerHTML="";
-  fc.appendChild(renderMatch(DATA.real.final,{roundLabel:"Final"}));
+  const fm = DATA.real.final;
+  const finalPlayed = fm.scoreA!=null;
+  fc.appendChild(renderMatch(fm,{roundLabel:"Final", grayscale:finalPlayed}));
+  const finalBadge = document.getElementById("badge-final");
+  if(finalBadge) finalBadge.textContent = finalPlayed?"1/1 jugados":"0/1 jugados";
+  const finalBody = document.getElementById("body-final");
+  const finalToggle = finalBody&&finalBody.previousElementSibling;
+  if(finalBody&&finalPlayed){
+    finalBody.classList.add("closed");
+    if(finalToggle) finalToggle.classList.add("collapsed");
+  } else if(finalBody){
+    finalBody.classList.remove("closed");
+    if(finalToggle) finalToggle.classList.remove("collapsed");
+  }
 
   const banner = document.getElementById("championBanner");
   if(DATA.real.champion){
@@ -2573,28 +2679,60 @@ function renderFriendBracket(name){
     {key:"sf",label:"Semifinales",rnd:"Semis"},
   ];
   stages.forEach(st=>{
-    const lbl=document.createElement("div");
-    lbl.className="stage-label"; lbl.textContent=st.label;
-    container.appendChild(lbl);
+    const allPlayed = real[st.key].every(m=>m.scoreA!=null);
+    const stPts = f[st.key].reduce((sum,m,i)=>sum+scoreMatch(m,real[st.key][i]),0);
+
+    const sec=document.createElement("div");
+    sec.className="acc-section";
+
+    const tog=document.createElement("button");
+    tog.className="acc-toggle"+(allPlayed?" collapsed":"");
+    tog.innerHTML="<span class=\"sec-title\">"+st.label+"</span>"
+      +(allPlayed?"<span class=\"acc-badge\">"+stPts+" pts</span>":"")
+      +"<span class=\"acc-chevron\">▾</span>";
+    tog.onclick=()=>toggleAcc(tog);
+
+    const body=document.createElement("div");
+    body.className="acc-body"+(allPlayed?" closed":"");
+
     const grid=document.createElement("div");
     grid.className="matchgrid";
     f[st.key].forEach((m,i)=>{
-      const pts=scoreMatch(m,real[st.key][i]);
-      grid.appendChild(renderMatch(m,{points:pts,roundLabel:st.rnd}));
+      const realM=real[st.key][i];
+      const pts=scoreMatch(m,realM);
+      const realPlayed=realM.scoreA!=null;
+      grid.appendChild(renderMatch(m,{points:pts,roundLabel:st.rnd,grayscale:realPlayed&&pts===0}));
     });
-    container.appendChild(grid);
+    body.appendChild(grid);
+    sec.appendChild(tog);
+    sec.appendChild(body);
+    container.appendChild(sec);
   });
-  const lf=document.createElement("div");
-  lf.className="stage-label"; lf.textContent="Final";
-  container.appendChild(lf);
-  const gf=document.createElement("div");
-  gf.className="matchgrid";
-  gf.appendChild(renderMatch(f.final,{points:scoreMatch(f.final,real.final),roundLabel:"Final"}));
-  container.appendChild(gf);
+
+  // Final accordion
+  const finalPlayed=real.final.scoreA!=null;
+  const finalPts=scoreMatch(f.final,real.final);
+  const fsec=document.createElement("div");
+  fsec.className="acc-section";
+  const ftog=document.createElement("button");
+  ftog.className="acc-toggle"+(finalPlayed?" collapsed":"");
+  ftog.innerHTML="<span class=\"sec-title\">Final</span>"
+    +(finalPlayed?"<span class=\"acc-badge\">"+finalPts+" pts</span>":"")
+    +"<span class=\"acc-chevron\">▾</span>";
+  ftog.onclick=()=>toggleAcc(ftog);
+  const fbody=document.createElement("div");
+  fbody.className="acc-body"+(finalPlayed?" closed":"");
+  const fgrid=document.createElement("div");
+  fgrid.className="matchgrid";
+  fgrid.appendChild(renderMatch(f.final,{points:finalPts,roundLabel:"Final",grayscale:finalPlayed&&finalPts===0}));
+  fbody.appendChild(fgrid);
   const ban=document.createElement("div");
   ban.className="champion-banner"+(f.champion?"":" tbd");
   ban.innerHTML="<div class=\"trophy\">🏆</div><div class=\"name\">"+(f.champion?fmtTeam(f.champion)+" campeón":"Sin pronóstico de campeón")+"</div>";
-  container.appendChild(ban);
+  fbody.appendChild(ban);
+  fsec.appendChild(ftog);
+  fsec.appendChild(fbody);
+  container.appendChild(fsec);
 }
 
 function renderFriendSelector(){

@@ -2524,28 +2524,42 @@ function renderReal(){
   document.getElementById("statClasificados").textContent = classified;
 }
 
-function scoreMatch(pred, real){
+function scoreMatch(pred, real, nextRound){
   if(!pred||!real) return 0;
   if(pred.teamA==null||pred.teamB==null) return 0;
   const realWinner = winnerOf(real);
   if(!realWinner) return 0;
-  const predWinner = (pred.scoreA!=null&&pred.scoreB!=null)
+  let predWinner = (pred.scoreA!=null&&pred.scoreB!=null)
     ?(pred.scoreA>pred.scoreB?pred.teamA:(pred.scoreB>pred.scoreA?pred.teamB:null))
     :null;
+  // Empate predicho: buscar en la ronda siguiente cuál equipo pusieron para inferir el ganador
+  if(predWinner===null && nextRound && pred.scoreA!=null && pred.scoreA===pred.scoreB){
+    if(nextRound.teamA===pred.teamA||nextRound.teamA===pred.teamB) predWinner=nextRound.teamA;
+    else if(nextRound.teamB===pred.teamA||nextRound.teamB===pred.teamB) predWinner=nextRound.teamB;
+  }
   let pts = 0;
   if(predWinner&&predWinner===realWinner) pts += DATA.rules.advance;
   if(pred.scoreA===real.scoreA&&pred.scoreB===real.scoreB) pts += DATA.rules.exact_score;
   return pts;
 }
 
+// Helper: obtiene el partido de la ronda siguiente para un amigo dado un stage e índice
+function nxtRound(f, key, i){
+  if(key==='ro32') return f.ro16&&f.ro16[Math.floor(i/2)];
+  if(key==='ro16') return f.qf &&f.qf [Math.floor(i/2)];
+  if(key==='qf')   return f.sf &&f.sf [Math.floor(i/2)];
+  if(key==='sf')   return f.final||null;
+  return null;
+}
+
 function computeFriendTotals(name){
   const f = DATA.friends[name];
   const real = DATA.real;
   let t = {ro32:0,ro16:0,qf:0,sf:0,final:0,total:0};
-  f.ro32.forEach((m,i)=>{ t.ro32+=scoreMatch(m,real.ro32[i]); });
-  f.ro16.forEach((m,i)=>{ t.ro16+=scoreMatch(m,real.ro16[i]); });
-  f.qf.forEach((m,i)=>{ t.qf+=scoreMatch(m,real.qf[i]); });
-  f.sf.forEach((m,i)=>{ t.sf+=scoreMatch(m,real.sf[i]); });
+  f.ro32.forEach((m,i)=>{ t.ro32+=scoreMatch(m,real.ro32[i],nxtRound(f,'ro32',i)); });
+  f.ro16.forEach((m,i)=>{ t.ro16+=scoreMatch(m,real.ro16[i],nxtRound(f,'ro16',i)); });
+  f.qf.forEach((m,i)=>{ t.qf+=scoreMatch(m,real.qf[i],nxtRound(f,'qf',i)); });
+  f.sf.forEach((m,i)=>{ t.sf+=scoreMatch(m,real.sf[i],nxtRound(f,'sf',i)); });
   t.final = scoreMatch(f.final,real.final);
   const realFin = [winnerOf(real.sf[0]),winnerOf(real.sf[1])].filter(Boolean);
   const predFin = [f.final&&f.final.teamA,f.final&&f.final.teamB].filter(Boolean);
@@ -2689,7 +2703,7 @@ function renderFriendBracket(name){
   ];
   stages.forEach(st=>{
     const allPlayed = real[st.key].every(m=>m.scoreA!=null);
-    const stPts = f[st.key].reduce((sum,m,i)=>sum+scoreMatch(m,real[st.key][i]),0);
+    const stPts = f[st.key].reduce((sum,m,i)=>sum+scoreMatch(m,real[st.key][i],nxtRound(f,st.key,i)),0);
 
     const sec=document.createElement("div");
     sec.className="acc-section";
@@ -2708,7 +2722,7 @@ function renderFriendBracket(name){
     grid.className="matchgrid";
     f[st.key].forEach((m,i)=>{
       const realM=real[st.key][i];
-      const pts=scoreMatch(m,realM);
+      const pts=scoreMatch(m,realM,nxtRound(f,st.key,i));
       const realPlayed=realM.scoreA!=null;
       grid.appendChild(renderMatch(m,{points:pts,roundLabel:st.rnd,grayscale:realPlayed&&pts===0}));
     });

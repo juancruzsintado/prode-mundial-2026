@@ -187,9 +187,9 @@ table.rank td.r{text-align:right;}
 .empty-pred{color:var(--muted);font-style:italic;padding:20px 0;text-align:center;}
 
 /* ── B&W MATCHES ───────────────────────────────────────── */
-.match-bw{filter:grayscale(1);opacity:.75;}
-.match-bw .match-head{background:#555;}
-.match-bw .team.winner{color:#111;}
+.match-bw .match-head{background:#999;}
+.match-bw .team:not(.winner){filter:grayscale(1);color:#aaa;}
+.match-bw .pen{color:#bbb;}
 
 /* ── ACCORDION ─────────────────────────────────────────── */
 .acc-section{margin-bottom:0;}
@@ -357,7 +357,7 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px
 <footer>Hecho con cariño para el grupo · los resultados se actualizan a medida que se juegan los partidos</footer>
 
 <script>window.EMBEDDED_DATA = {
-  "updated_at": "2026-07-03T07:20:00Z",
+  "updated_at": "2026-07-03T08:04:00Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -2442,9 +2442,13 @@ function renderBracketSection(containerId, matches, label){
   const pending = indexed.filter(({m})=>m.scoreA==null);
   const played  = indexed.filter(({m})=>m.scoreA!=null);
 
-  // pending: soonest kickoff first, then original index
+  // pending: kickoff first (soonest), then no-kickoff by original index
   pending.sort((a,b)=>{
-    if(a.m.kickoff&&b.m.kickoff) return new Date(a.m.kickoff)-new Date(b.m.kickoff);
+    const ak = a.m.kickoff ? new Date(a.m.kickoff) : null;
+    const bk = b.m.kickoff ? new Date(b.m.kickoff) : null;
+    if(ak&&bk) return ak-bk;
+    if(ak) return -1;
+    if(bk) return 1;
     return a.i-b.i;
   });
   // played: reverse order (most recently played first)

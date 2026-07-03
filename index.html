@@ -2451,8 +2451,13 @@ function renderBracketSection(containerId, matches, label){
     if(bk) return 1;
     return a.i-b.i;
   });
-  // played: reverse order (most recently played first)
-  played.sort((a,b)=>b.i-a.i);
+  // played: most recent kickoff first, fallback to reverse index
+  played.sort((a,b)=>{
+    const ak = a.m.kickoff ? new Date(a.m.kickoff) : null;
+    const bk = b.m.kickoff ? new Date(b.m.kickoff) : null;
+    if(ak&&bk) return bk-ak;
+    return b.i-a.i;
+  });
 
   [...pending,...played].forEach(({m})=>{
     c.appendChild(renderMatch(m,{roundLabel:label, grayscale:m.scoreA!=null}));

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-03T07:20:00Z",
+  "updated_at": "2026-07-04T07:02:47Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -86,15 +86,17 @@
       },
       {
         "teamA": "Argentina",
-        "scoreA": null,
+        "scoreA": 3,
         "teamB": "Cabo Verde",
-        "scoreB": null
+        "scoreB": 2
       },
       {
         "teamA": "Australia",
-        "scoreA": null,
+        "scoreA": 1,
         "teamB": "Egipto",
-        "scoreB": null
+        "scoreB": 1,
+        "penaltyWinner": "Egipto",
+        "penaltyScore": "4-2"
       },
       {
         "teamA": "Suiza",
@@ -104,9 +106,9 @@
       },
       {
         "teamA": "Colombia",
-        "scoreA": null,
+        "scoreA": 1,
         "teamB": "Ghana",
-        "scoreB": null
+        "scoreB": 0
       }
     ],
     "ro16": [

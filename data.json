@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-05T10:53:24Z",
+  "updated_at": "2026-07-05T11:05:42Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -88,7 +88,8 @@
         "teamA": "Argentina",
         "scoreA": 3,
         "teamB": "Cabo Verde",
-        "scoreB": 2
+        "scoreB": 2,
+        "kickoff": "2026-07-03T22:00:00Z"
       },
       {
         "teamA": "Australia",
@@ -96,7 +97,8 @@
         "teamB": "Egipto",
         "scoreB": 1,
         "penaltyWinner": "Egipto",
-        "penaltyScore": "4-2"
+        "penaltyScore": "4-2",
+        "kickoff": "2026-07-03T18:00:00Z"
       },
       {
         "teamA": "Suiza",
@@ -108,7 +110,8 @@
         "teamA": "Colombia",
         "scoreA": 1,
         "teamB": "Ghana",
-        "scoreB": 0
+        "scoreB": 0,
+        "kickoff": "2026-07-04T01:30:00Z"
       }
     ],
     "ro16": [
@@ -116,49 +119,65 @@
         "teamA": "Paraguay",
         "scoreA": 0,
         "teamB": "Francia",
-        "scoreB": 1
+        "scoreB": 1,
+        "kickoff": "2026-07-04T21:00:00Z",
+        "venue": "Filadelfia"
       },
       {
         "teamA": "Canada",
         "scoreA": 0,
         "teamB": "Marruecos",
-        "scoreB": 3
+        "scoreB": 3,
+        "kickoff": "2026-07-04T17:00:00Z",
+        "venue": "Houston"
       },
       {
-        "teamA": null,
+        "teamA": "Portugal",
         "scoreA": null,
-        "teamB": null,
-        "scoreB": null
+        "teamB": "España",
+        "scoreB": null,
+        "kickoff": "2026-07-06T19:00:00Z",
+        "venue": "Los Ángeles"
       },
       {
         "teamA": "USA",
         "scoreA": null,
         "teamB": "Bélgica",
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-07T00:00:00Z",
+        "venue": "Seattle"
       },
       {
         "teamA": "Brasil",
         "scoreA": null,
         "teamB": "Noruega",
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-05T20:00:00Z",
+        "venue": "Nueva York"
       },
       {
         "teamA": "México",
         "scoreA": null,
         "teamB": "Inglaterra",
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-06T00:00:00Z",
+        "venue": "Ciudad de México"
       },
       {
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-07T16:00:00Z",
+        "venue": "Atlanta"
       },
       {
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-07T20:00:00Z",
+        "venue": "Vancouver"
       }
     ],
     "qf": [
@@ -166,25 +185,33 @@
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-09T20:00:00Z",
+        "venue": "Boston"
       },
       {
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-10T19:00:00Z",
+        "venue": "Los Ángeles"
       },
       {
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-11T21:00:00Z",
+        "venue": "Miami"
       },
       {
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-12T01:00:00Z",
+        "venue": "Kansas City"
       }
     ],
     "sf": [
@@ -192,20 +219,26 @@
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-14T19:00:00Z",
+        "venue": "Dallas"
       },
       {
         "teamA": null,
         "scoreA": null,
         "teamB": null,
-        "scoreB": null
+        "scoreB": null,
+        "kickoff": "2026-07-15T19:00:00Z",
+        "venue": "Atlanta"
       }
     ],
     "final": {
       "teamA": null,
       "scoreA": null,
       "teamB": null,
-      "scoreB": null
+      "scoreB": null,
+      "kickoff": "2026-07-19T19:00:00Z",
+      "venue": "Nueva York"
     },
     "champion": null
   },

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-04T07:02:47Z",
+  "updated_at": "2026-07-05T10:53:24Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -114,15 +114,15 @@
     "ro16": [
       {
         "teamA": "Paraguay",
-        "scoreA": null,
+        "scoreA": 0,
         "teamB": "Francia",
-        "scoreB": null
+        "scoreB": 1
       },
       {
         "teamA": "Canada",
-        "scoreA": null,
+        "scoreA": 0,
         "teamB": "Marruecos",
-        "scoreB": null
+        "scoreB": 3
       },
       {
         "teamA": null,

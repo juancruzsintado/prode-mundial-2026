@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-05T11:05:42Z",
+  "updated_at": "2026-07-07T07:25:00Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -133,33 +133,33 @@
       },
       {
         "teamA": "Portugal",
-        "scoreA": null,
+        "scoreA": 0,
         "teamB": "España",
-        "scoreB": null,
+        "scoreB": 1,
         "kickoff": "2026-07-06T19:00:00Z",
         "venue": "Los Ángeles"
       },
       {
         "teamA": "USA",
-        "scoreA": null,
+        "scoreA": 1,
         "teamB": "Bélgica",
-        "scoreB": null,
+        "scoreB": 4,
         "kickoff": "2026-07-07T00:00:00Z",
         "venue": "Seattle"
       },
       {
         "teamA": "Brasil",
-        "scoreA": null,
+        "scoreA": 1,
         "teamB": "Noruega",
-        "scoreB": null,
+        "scoreB": 2,
         "kickoff": "2026-07-05T20:00:00Z",
         "venue": "Nueva York"
       },
       {
         "teamA": "México",
-        "scoreA": null,
+        "scoreA": 2,
         "teamB": "Inglaterra",
-        "scoreB": null,
+        "scoreB": 3,
         "kickoff": "2026-07-06T00:00:00Z",
         "venue": "Ciudad de México"
       },

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07T07:25:00Z",
+  "updated_at": "2026-07-08T12:00:00Z",
   "rules": {
     "advance": 3,
     "exact_score": 5,
@@ -164,20 +164,22 @@
         "venue": "Ciudad de México"
       },
       {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null,
+        "teamA": "Argentina",
+        "scoreA": 3,
+        "teamB": "Egipto",
+        "scoreB": 2,
         "kickoff": "2026-07-07T16:00:00Z",
         "venue": "Atlanta"
       },
       {
-        "teamA": null,
-        "scoreA": null,
-        "teamB": null,
-        "scoreB": null,
+        "teamA": "Suiza",
+        "scoreA": 0,
+        "teamB": "Colombia",
+        "scoreB": 0,
         "kickoff": "2026-07-07T20:00:00Z",
-        "venue": "Vancouver"
+        "venue": "Vancouver",
+        "penaltyWinner": "Suiza",
+        "penaltyScore": "4-3"
       }
     ],
     "qf": [

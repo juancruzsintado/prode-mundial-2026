@@ -2475,7 +2475,7 @@ function renderBracketSection(containerId, matches, label){
   if(!c) return;
   c.innerHTML = "";
 
-  const indexed = matches.map((m,i)=>({m,i})).filter(({m})=>m.teamA||m.teamB);
+  const indexed = matches.map((m,i)=>({m,i}));
   const pending = indexed.filter(({m})=>m.scoreA==null);
   const played  = indexed.filter(({m})=>m.scoreA!=null);
 

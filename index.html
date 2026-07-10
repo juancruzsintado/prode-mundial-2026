@@ -246,6 +246,29 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px
 
 /* ── CELEBRATION POPUP ─────────────────────────────────── */
 #celebCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
+#invictoCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
+#invictoOverlay{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(55,10,90,.82);align-items:center;justify-content:center;cursor:pointer;
+}
+#invictoOverlay.show{display:flex;animation:fadein .3s ease;}
+#invictoBox{
+  background:#fff;border-radius:26px;padding:38px 32px 30px;
+  text-align:center;max-width:320px;width:90%;
+  box-shadow:0 32px 80px rgba(0,0,0,.4);
+  animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);cursor:default;
+}
+#invictoBox .inv-trophy{font-size:3rem;line-height:1;display:block;margin-bottom:4px;animation:cbounce .9s ease-in-out infinite alternate;}
+#invictoBox .inv-sub{font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#6d28d9;margin:8px 0 6px;}
+#invictoBox .inv-name{font-family:'Anton',sans-serif;font-size:46px;color:#6d28d9;line-height:.95;margin-bottom:10px;}
+#invictoBox .inv-divider{height:1px;background:#f0ede3;margin:12px 0;}
+#invictoBox .inv-msg{font-size:.87rem;color:var(--ink2);margin-bottom:18px;line-height:1.6;}
+#invictoBox .inv-dismiss{
+  display:block;width:100%;padding:13px;
+  border-radius:999px;background:#6d28d9;color:#fff;
+  font-weight:800;font-size:14px;letter-spacing:.02em;
+  border:none;cursor:pointer;font-family:'Archivo',sans-serif;
+}
 #celebOverlay{
   display:none;position:fixed;inset:0;z-index:1000;
   background:rgba(10,82,48,.78);align-items:center;justify-content:center;cursor:pointer;
@@ -277,6 +300,17 @@ footer{text-align:center;color:var(--muted);font-size:.75rem;padding:18px 0 40px
 <body>
 
 <canvas id="celebCanvas"></canvas>
+<canvas id="invictoCanvas"></canvas>
+<div id="invictoOverlay" onclick="closeInvicto()">
+  <div id="invictoBox" onclick="event.stopPropagation()">
+    <span class="inv-trophy">🎾</span>
+    <div class="inv-sub">Último invicto del torneo</div>
+    <div class="inv-name">Iña</div>
+    <div class="inv-divider"></div>
+    <div class="inv-msg">Último oficial desde la fase de grupos.<br><strong>Un campeón del fondo.</strong></div>
+    <button class="inv-dismiss" onclick="closeInvicto()">Que orgullo 🎾</button>
+  </div>
+</div>
 <div id="celebOverlay" onclick="closeCeleb()">
   <div id="celebBox" onclick="event.stopPropagation()">
     <span class="celeb-trophy">🏆</span>
@@ -2849,6 +2883,57 @@ document.addEventListener("click",function(e){
   const mc = e.target.closest(".match-correct");
   if(mc) launchClickConfetti(e.clientX, e.clientY);
 });
+
+let tennisBallAnim=null;
+function launchTennisBalls(){
+  const canvas = document.getElementById("invictoCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const balls = Array.from({length:28},()=>({
+    x: Math.random()*canvas.width,
+    y: -30 - Math.random()*250,
+    vx: (Math.random()-.5)*4,
+    vy: 3+Math.random()*4,
+    size: 22+Math.random()*18,
+    rot: Math.random()*360,
+    vrot: (Math.random()-.5)*12,
+    bounces: 0
+  }));
+  if(tennisBallAnim) cancelAnimationFrame(tennisBallAnim);
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive=false;
+    balls.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=0.35; p.rot+=p.vrot;
+      if(p.y>canvas.height-p.size && p.bounces<3){
+        p.vy=-p.vy*0.55; p.y=canvas.height-p.size; p.bounces++;
+      }
+      if(p.y<canvas.height+60) alive=true;
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.font=p.size+"px serif";
+      ctx.textAlign="center";
+      ctx.textBaseline="middle";
+      ctx.fillText("🎾",0,0);
+      ctx.restore();
+    });
+    if(alive) tennisBallAnim=requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+function showInvicto(){
+  document.getElementById("invictoOverlay").classList.add("show");
+  launchTennisBalls();
+}
+function closeInvicto(){
+  document.getElementById("invictoOverlay").classList.remove("show");
+  if(tennisBallAnim) cancelAnimationFrame(tennisBallAnim);
+  document.getElementById("invictoCanvas").getContext("2d")
+    .clearRect(0,0,window.innerWidth,window.innerHeight);
+}
 function showCelebration(name, pts){
   document.getElementById("celebName").textContent = name;
   document.getElementById("celebPtsNum").textContent = pts+" ";
@@ -2891,7 +2976,7 @@ function renderRanking(){
       ? "<span class=\"crown-anim\">👑</span>"
       : isLast ? "<span class=\"skull-anim\">💀</span>" : "";
     const invictoBadge = (isLast && r.name==="Iña")
-      ? "<span class=\"invicto-badge\" title=\"Colero oficial desde la fase de grupos. Un campeón del fondo.\">Último invicto 🏆</span>"
+      ? "<span class=\"invicto-badge\" onclick=\"showInvicto();event.stopPropagation()\" style=\"cursor:pointer\">Último invicto 🏆</span>"
       : "";
     tr.innerHTML =
       "<td><span class=\"pos-badge "+pc+"\">"+pos+"</span></td>"+

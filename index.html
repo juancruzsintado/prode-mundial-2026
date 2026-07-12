@@ -527,7 +527,7 @@ function renderMatch(m, opts){
       const correct = realMvp && predMvp && predMvp === realMvp;
       if(realMvp){
         val.className = correct ? "mvp-correct" : "mvp-wrong";
-        val.textContent = (predMvp||"—") + (correct ? " ✓" : " (real: "+realMvp+")");
+        val.textContent = (predMvp||"—") + (correct ? " ✓ +1pt" : " (real: "+realMvp+")");
       } else {
         val.className = "mvp-pred";
         val.textContent = predMvp || "—";
